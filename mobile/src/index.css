@@ -21,6 +21,9 @@ a {
 a:hover {
   color: #535bf2;
 }
+:root:root {
+  --adm-color-primary: #a062d4;
+}
 
 body {
   margin: 0;

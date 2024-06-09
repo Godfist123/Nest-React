@@ -1,35 +1,48 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useMutation, useQuery } from "@apollo/client";
+import "./App.css";
+import { FIND, UPDATE } from "./graphql/demo";
+import { Button, Form, Input } from "antd-mobile";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { loading, data } = useQuery(FIND, {
+    variables: { id: "44c3ce3d-551e-4211-8c84-ac709cd0c86c" },
+  });
 
+  const [update] = useMutation(UPDATE);
+  const updateHandler = (data: object) => {
+    update({
+      variables: {
+        id: "44c3ce3d-551e-4211-8c84-ac709cd0c86c",
+        params: {
+          ...data,
+        },
+      },
+    }).catch((error) => {
+      console.error("GraphQL Error:", error.graphQLErrors);
+      console.error("Network Error:", error.networkError);
+    });
+  };
+
+  const submitButton = (
+    <Button type="submit" color="primary" size="large">
+      submit
+    </Button>
+  );
+
+  if (loading) return <p>Loading...</p>;
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div>
+      <li>data:{JSON.stringify(data)}</li>
+      <Form footer={submitButton} onFinish={updateHandler} layout="horizontal">
+        <Form.Item name="name" label="name">
+          <Input></Input>
+        </Form.Item>
+        <Form.Item name="desc" label="desc">
+          <Input></Input>
+        </Form.Item>
+      </Form>
+    </div>
+  );
 }
 
-export default App
+export default App;
