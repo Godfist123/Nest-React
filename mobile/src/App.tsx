@@ -33,7 +33,10 @@ function App() {
   return (
     <div>
       <li>data:{JSON.stringify(data)}</li>
-      <img src="http://localhost:3000/file/IMG_5695.JPG" alt="Streamed Image" />
+      <img
+        src="http://localhost:3000/aws/file/IMG_5695.JPG"
+        alt="Streamed Image"
+      />
       <Form footer={submitButton} onFinish={updateHandler} layout="horizontal">
         <Form.Item name="name" label="name">
           <Input></Input>
