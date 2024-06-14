@@ -10,17 +10,21 @@
 }
 
 .header {
-  width: 100%; // Ensures it stretches across the container if not already full-width
+  display: flex; // Makes header a flex container
+  align-items: center; // Vertically centers the children
+  justify-content: flex-start; // Horizontally centers the children
+  width: 100%;
   text-align: center;
-  margin-top: 0;
+  margin-top: 20px;
   margin-bottom: 200px;
   height: 30px;
 
   h1 {
-    font-size: 30px;
+    font-size: 20px;
     color: #333;
-    margin-bottom: 10px;
+    margin: 0 10px; // Add horizontal margin for spacing between image and h1
   }
+
   p {
     font-size: 14px;
     color: #666;

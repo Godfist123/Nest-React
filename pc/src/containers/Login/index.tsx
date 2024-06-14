@@ -1,4 +1,3 @@
-import { LockOutlined, MobileOutlined } from "@ant-design/icons";
 import {
   LoginForm,
   ProConfigProvider,
@@ -6,23 +5,33 @@ import {
   ProFormCheckbox,
   ProFormText,
 } from "@ant-design/pro-components";
-import { message, theme } from "antd";
+import { LockOutlined, MobileOutlined } from "@ant-design/icons";
+import { Space, message, theme, Typography } from "antd";
 import styles from "./index.module.scss";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const { token } = theme.useToken();
-
+  const { Title } = Typography;
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h1>123</h1>
+        <Link to="/">
+          <Space>
+            <Title>
+              <img
+                style={{ width: 40, marginTop: 10, marginLeft: 20 }}
+                src="http://localhost:3000/aws/file/icon.jpg"
+              />
+            </Title>
+            <Title>Ryan's Online Edu</Title>
+          </Space>
+        </Link>
       </div>
+
       <ProConfigProvider hashed={false}>
         <div style={{ backgroundColor: token.colorBgContainer }}>
-          <LoginForm
-            logo="http://localhost:3000/aws/file/icon.jpg"
-            title="Ryan's online edu platform"
-          >
+          <LoginForm>
             <>
               <ProFormText
                 fieldProps={{
