@@ -9,10 +9,32 @@ import { LockOutlined, MobileOutlined } from "@ant-design/icons";
 import { Space, message, theme, Typography } from "antd";
 import styles from "./index.module.scss";
 import { Link } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import { checkOTP, sendOTP } from "../../graphql/auth";
 
 const Login = () => {
   const { token } = theme.useToken();
   const { Title } = Typography;
+  const [runSendOTP] = useMutation(sendOTP);
+  const [runCheckOTP] = useMutation(checkOTP);
+
+  interface ILogin {
+    mobile: string;
+    captcha: string;
+  }
+
+  const Login = async (values: ILogin) => {
+    console.log(values);
+    const res = await runCheckOTP({
+      variables: { tel: values.mobile, code: values.captcha },
+    });
+    if (res.data.checkOTP) {
+      message.success("Login successfully!");
+    } else {
+      message.error("Login failed!");
+    }
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
@@ -31,7 +53,7 @@ const Login = () => {
 
       <ProConfigProvider hashed={false}>
         <div style={{ backgroundColor: token.colorBgContainer }}>
-          <LoginForm>
+          <LoginForm onFinish={Login}>
             <>
               <ProFormText
                 fieldProps={{
@@ -66,6 +88,7 @@ const Login = () => {
                   }
                   return "获取验证码";
                 }}
+                phoneName={"mobile"}
                 name="captcha"
                 rules={[
                   {
@@ -73,8 +96,14 @@ const Login = () => {
                     message: "请输入验证码！",
                   },
                 ]}
-                onGetCaptcha={async () => {
-                  message.success("获取验证码成功！验证码为：1234");
+                onGetCaptcha={async (tel: string) => {
+                  console.log(tel);
+                  const res = await runSendOTP({ variables: { tel } });
+                  if (res.data.sendOTP) {
+                    message.success("OTP sent successfully!");
+                  } else {
+                    message.error("OTP sent failed!");
+                  }
                 }}
               />
             </>
