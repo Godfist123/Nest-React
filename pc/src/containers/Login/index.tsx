@@ -8,28 +8,33 @@ import {
 import { LockOutlined, MobileOutlined } from "@ant-design/icons";
 import { Space, message, theme, Typography } from "antd";
 import styles from "./index.module.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { checkOTP, sendOTP } from "../../graphql/auth";
+import { AUTH_TOKEN } from "../../utils/constants";
 
 const Login = () => {
   const { token } = theme.useToken();
   const { Title } = Typography;
   const [runSendOTP] = useMutation(sendOTP);
   const [runCheckOTP] = useMutation(checkOTP);
+  const navi = useNavigate();
 
   interface ILogin {
     mobile: string;
     captcha: string;
+    autoLogin: boolean;
   }
 
   const Login = async (values: ILogin) => {
-    console.log(values);
     const res = await runCheckOTP({
       variables: { tel: values.mobile, code: values.captcha },
     });
     if (res.data.checkOTP.code === 200) {
+      if (values.autoLogin)
+        localStorage.setItem(AUTH_TOKEN, res.data.checkOTP.token);
       message.success(res.data.checkOTP.message);
+      navi("/");
     } else {
       message.error(res.data.checkOTP.message);
     }
@@ -43,7 +48,7 @@ const Login = () => {
             <Title>
               <img
                 style={{ width: 40, marginTop: 10, marginLeft: 20 }}
-                src="http://localhost:3000/aws/file/icon.jpg"
+                src="http://localhost:3000/aws/publicfile/icon.jpg"
               />
             </Title>
             <Title>Ryan's Online Edu</Title>

@@ -14,6 +14,7 @@ export const checkOTP = gql`
     checkOTP(tel: $tel, code: $code) {
       code
       message
+      token
     }
   }
 `;
