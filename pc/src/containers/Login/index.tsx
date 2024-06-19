@@ -28,10 +28,10 @@ const Login = () => {
     const res = await runCheckOTP({
       variables: { tel: values.mobile, code: values.captcha },
     });
-    if (res.data.checkOTP) {
-      message.success("Login successfully!");
+    if (res.data.checkOTP.code === 200) {
+      message.success(res.data.checkOTP.message);
     } else {
-      message.error("Login failed!");
+      message.error(res.data.checkOTP.message);
     }
   };
 
@@ -97,12 +97,11 @@ const Login = () => {
                   },
                 ]}
                 onGetCaptcha={async (tel: string) => {
-                  console.log(tel);
                   const res = await runSendOTP({ variables: { tel } });
-                  if (res.data.sendOTP) {
-                    message.success("OTP sent successfully!");
+                  if (res.data.sendOTP.code === 200) {
+                    message.success(res.data.sendOTP.message);
                   } else {
-                    message.error("OTP sent failed!");
+                    message.error(res.data.sendOTP.message);
                   }
                 }}
               />
